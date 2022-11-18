@@ -47,9 +47,11 @@ def recurse_gen(level, prefix, branch_factor, leaf_number, file_size, first=Fals
               help="at the final level how many leaf directories will we have")
 @click.option("--file-size", default=1024, type=click.INT,
               help='how large is the leaf file (bytes)')
+@click.option("--dryrun", is_flag=True, default=False, help="just do a dry run (don't write anything)")
 @click.argument("source_dir", default="./")
 def generate_files_recursive(recurse_levels, source_dir,
                              branch_factor, leaf_number,
+                             dryrun, 
                              file_size):
     """
     Recursively generate a lot of files. No, really, a lot. 
@@ -61,6 +63,10 @@ def generate_files_recursive(recurse_levels, source_dir,
 
     print(f"This will generate {num_files} directories")
     print(f"This will generate {num_files * file_size/1e9:3.4f} GB of data")
+
+    if dryrun:
+        print("Dry run, not creating files")
+        return
     recurse_gen(recurse_levels, source_dir, branch_factor,
                 leaf_number, file_size, first=True)
 
